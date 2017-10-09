@@ -22,23 +22,23 @@ class BTInterface_Slave(object):
 
   def listen(self):
 
-    if self.target_addr is None:
+    # if self.target_addr is None:
 
-        for i in range(10):
-          nearby_devices = bluetooth.discover_devices(lookup_names = True)
+    #     for i in range(10):
+    #       nearby_devices = bluetooth.discover_devices(lookup_names = True)
 
-          if len(nearby_devices)>0:
-            for bdaddr, name in nearby_devices:
-              if name.startswith(self.target_name):
-                self.device_found = True
-                self.target_addr = bdaddr
-                break
-          if self.device_found:
-            break
+    #       if len(nearby_devices)>0:
+    #         for bdaddr, name in nearby_devices:
+    #           if name.startswith(self.target_name):
+    #             self.device_found = True
+    #             self.target_addr = bdaddr
+    #             break
+    #       if self.device_found:
+    #         break
 
     try:
       self.sock=bluetooth.BluetoothSocket(bluetooth.RFCOMM)
-      self.sock.connect((self.hostMACAddress,self.port))
+      self.sock.bind((self.hostMACAddress,self.port))
       self.sock.listen(backlog)
       client, clientinfo = self.sock.accept()
       while 1:

@@ -6,7 +6,7 @@ import time
 import operator
 import threading
 
-serverMACAddress = ''
+serverMACAddress = 'B8:27EB:1B:BE:1B'
 port = 1
 size = 1024
 class BTInterface_Master(object):
@@ -16,23 +16,23 @@ class BTInterface_Master(object):
       self.port = port
       self.device_found = False
       self.tries = 0
-      self.target_addr = target_addr
+      self.target_addr = serverMACAddress
       self.sock = None
 
   def connect(self):
-    if self.target_addr is None:
+    # if self.target_addr is None:
 
-        for i in range(10):
-          nearby_devices = bluetooth.discover_devices(lookup_names = True)
+    #     for i in range(10):
+    #       nearby_devices = bluetooth.discover_devices(lookup_names = True)
 
-          if len(nearby_devices)>0:
-            for bdaddr, name in nearby_devices:
-              if name.startswith(self.target_name):
-                self.device_found = True
-                self.target_addr = bdaddr
-                break
-          if self.device_found:
-            break
+    #       if len(nearby_devices)>0:
+    #         for bdaddr, name in nearby_devices:
+    #           if name.startswith(self.target_name):
+    #             self.device_found = True
+    #             self.target_addr = bdaddr
+    #             break
+    #       if self.device_found:
+    #         break
 
     try:
       self.sock=bluetooth.BluetoothSocket(bluetooth.RFCOMM)
