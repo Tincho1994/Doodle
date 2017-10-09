@@ -8,7 +8,7 @@ import threading
 
 hostMACAddress  = 'B8:27:EB:1B:BE:1B'
 backlog = 1
-port  = 1
+port  = 5
 size = 1024
 
 class BTInterface_Slave(object):
@@ -47,7 +47,7 @@ class BTInterface_Slave(object):
           print(data)
 
     except bluetooth.btcommon.BluetoothError as error:
-      sys.stdout.write(error.strerror)
+      sys.stdout.write(str(error.strerror))
       sys.stdout.flush()
       time.sleep(5.0)
       sys.exit(1)
