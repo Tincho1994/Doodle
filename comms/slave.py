@@ -6,7 +6,7 @@ import time
 import operator
 import threading
 
-hostMACAddress  = ''
+hostMACAddress  = 'B8:27:EB:1B:BE:1B'
 backlog = 1
 port  = 1
 size = 1024
@@ -14,7 +14,7 @@ size = 1024
 class BTInterface_Slave(object):
 
   def __init__(self):
-  	  self.target_name = ""
+      self.target_name = ""
       self.hostMACAddress = hostMACAddress
       self.port = port
       self.size = size
