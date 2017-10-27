@@ -2,14 +2,21 @@
 import numpy as np
 import cv2
 import cv2.aruco as aruco
+import picamera
+import picamera.array 
  
- 
-cap = cv2.VideoCapture(0)
+#cap = cv2.VideoCapture(0)
+camera = picamera.PiCamera()
+stream = picamera.array.PiRGBArray(camera)
+
+camera.framerate = 60
+camera.resolution = (640,480)
 print(cv2.__version__)
 while(True):
     # Capture frame-by-frame
-    ret, frame = cap.read()
-
+    #ret, frame = cap.read()
+    camera.capture(stream, 'bgr', use_video_port=True)
+    frame = stream.array
     # Our operations on the frame come here
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     aruco_dict = aruco.Dictionary_get(aruco.DICT_6X6_250)
@@ -28,7 +35,8 @@ while(True):
     cv2.imshow('frame',gray)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
- 
+    stream.seek(0)
+    stream.truncate() 
 # When everything done, release the capture
 cap.release()
 cv2.destroyAllWindows()
