@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import numpy as np
+import math
 import cv2
 import cv2.aruco as aruco
 import picamera
@@ -24,14 +25,25 @@ while(True):
  
 
     corners, ids, rejectedImgPoints = aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
-    print(corners)
- 
+    if corners:  
+      #print(corners[0][0][0])
+    
+      fL = corners[0][0][0]
+      fR = corners[0][0][1]
+      bR = corners[0][0][2]
+      cP = [(fL[0]+bR[0])/2, (fL[1]+bR[1])/2]
+      tP = [(fL[0]+fR[0])/2,(fL[1]+fR[1])/2]
+      ang = math.atan2(cP[1]-tP[1],tP[0]-cP[0])*180/math.pi
+      print(ang)
     #It's working.
     # my problem was that the cellphone put black all around it. The alrogithm
     # depends very much upon finding rectangular black blobs
  
-    gray = aruco.drawDetectedMarkers(gray, corners)
-
+      gray = aruco.drawDetectedMarkers(frame, corners)
+      gray = cv2.circle(gray,(corners[0][0][0][0],corners[0][0][0][1]),10,(0,0,255),-1)
+      gray = cv2.circle(gray,(corners[0][0][2][0],corners[0][0][2][1]),10,(255,0,0),-1)
+      gray = cv2.circle(gray,(int(cP[0]),int(cP[1])),10,(0,255,0),-1)
+      gray = cv2.circle(gray,(int(tP[0]),int(tP[1])),10,(0,255,255),-1)
     cv2.imshow('frame',gray)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
