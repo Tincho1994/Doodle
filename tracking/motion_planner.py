@@ -6,14 +6,22 @@ import cv2.aruco as aruco
 import picamera
 import picamera.array 
  
- def calcVec(pose,dest):
+def calcVec(pose,dest):
   if pose:
-    vec = [tP[0]-cP[0],cP[1]-tP[1]]
+    vec = [[dest[0]-pose[0]],[pose[1]-dest[1]]]
     velVec = vec/(np.linalg.norm(vec))
   else:
     velVec =[]
   return velVec
 
+def linVel(pose,vel):
+    ang = math.radians(pose[2])
+    epsilon = float(2)
+    R = [[math.cos(ang),math.sin(ang)],[-math.sin(ang),math.cos(ang)]]
+    T = np.dot([[1,0],[0,1/epsilon]],R)
+    vLin = np.dot(T,vel)
+    
+    return vLin
 #cap = cv2.VideoCapture(0)
 camera = picamera.PiCamera()
 stream = picamera.array.PiRGBArray(camera)
@@ -56,10 +64,11 @@ while(True):
       #gray = aruco.drawDetectedMarkers(frame, corners)
       frame = cv2.circle(gray,(int(cP[0]),int(cP[1])),10,(0,255,0),-1)
       curPose = [cP[0],cP[1], ang]
-    frame = cv2.circle(frame,(int(curDest[0]),curDest(cP[1])),10,(255,0,0),-1)
+    frame = cv2.circle(frame,(int(curDest[0]),int(curDest[1])),10,(255,0,0),-1)
     cv2.imshow('frame',frame)
-    velVec = calcVel(curPose,curDest)
-    print(velVec)
+    velVec = calcVec(curPose,curDest)
+    velLin = linVel(curPose,velVec)
+    print(velLin)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
     stream.seek(0)
