@@ -7,6 +7,7 @@ import time
 import operator
 import threading
 import speed2DC 
+
 class doodleBot(object):
 
   def __init__(self):
