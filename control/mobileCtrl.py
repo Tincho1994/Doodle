@@ -13,7 +13,7 @@ class doodleBot(object):
   def __init__(self):
       self.pipe = connect2pipe()
       self.rwpin = 26
-      self.lwpin = 30
+      self.lwpin = 18
 
   def initIO():
     GPIO.setmode(GPIO.BCM)               # choose BCM
