@@ -21,15 +21,6 @@ class BTInterface_Master(object):
 		self.sock = None
 
 	def connect(self):
-
-		# for i in range(10):
-		# 	nearby_devices = bluetooth.discover_devices(lookup_names = True)
-
-		# 	if len(nearby_devices)>0:
-		# 		for bdaddr, name in nearby_devices:
-		# 			print(name)
-		
-
 		try:
 			self.sock=bluetooth.BluetoothSocket(bluetooth.RFCOMM)
 			self.sock.connect((self.target_addr,self.port))
@@ -42,8 +33,34 @@ class BTInterface_Master(object):
 		sys.stdout.flush()
 		return True
 
+	def openFifo():
+		path = "./bluetooth.fifo"
+		file_exists = os.path.exists(path)
+		if not file_exists:
+			os.mkfifo(path)
+		return open(path,"r",0)
+
 if __name__ =='__main__':
 	master = BTInterface_Master()
 	master.connect()
-	master.sock.send("Test test")
+
+	while(True):
+		line = fifo.readline()
+		# ------------------------------------------------------------
+		# If writer side of fifo is finished, close fifo and reopen it
+		# so that a new program can send commands
+		# ------------------------------------------------------------
+		if len(line) == 0:
+			print("Writer closed")
+			fifo.close()
+			fifo = openFifo(target_name)
+		# ----------------------------------------------------------------
+		# Else, writer has written a line of commands parse the commands
+		# as numbers and have sphero object send via BT
+		# ----------------------------------------------------------------
+		else:
+			# master.sock.send("Test test")
+			print('Line Detected')
+		if cv2.waitKey(1) & 0xFF == ord('q'):
+			break
 	master.sock.close()

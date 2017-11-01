@@ -18,24 +18,17 @@ class BTInterface_Slave(object):
       self.hostMACAddress = hostMACAddress
       self.port = port
       self.size = size
+      self.pipe = connect2pipe()
       self.sock = None
 
+  def connect2pipe():
+    path = "./command.fifo"
+    file_exists = os.path.exists(path)
+    if not file_exists:
+      os.mkfifo(path)
+    return open(path,"w",1)
+
   def listen(self):
-
-    # if self.target_addr is None:
-
-    #     for i in range(10):
-    #       nearby_devices = bluetooth.discover_devices(lookup_names = True)
-
-    #       if len(nearby_devices)>0:
-    #         for bdaddr, name in nearby_devices:
-    #           if name.startswith(self.target_name):
-    #             self.device_found = True
-    #             self.target_addr = bdaddr
-    #             break
-    #       if self.device_found:
-    #         break
-
     try:
       self.sock=bluetooth.BluetoothSocket(bluetooth.RFCOMM)
       self.sock.bind((self.hostMACAddress,self.port))
@@ -44,6 +37,8 @@ class BTInterface_Slave(object):
       while 1:
         data = client.recv(size)
         if data:
+          self.pipe.write(data + "\n")
+          self.pipe.flush()
           print(data)
 
     except bluetooth.btcommon.BluetoothError as error:
