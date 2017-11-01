@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 import bluetooth
+import cv2
+import os
 import sys
 import struct
 import time
@@ -25,15 +27,15 @@ class BTInterface_Master(object):
 			self.sock=bluetooth.BluetoothSocket(bluetooth.RFCOMM)
 			self.sock.connect((self.target_addr,self.port))
 		except bluetooth.btcommon.BluetoothError as error:
-			sys.stdout.write(error.strerror)
-			sys.stdout.flush()
+			#sys.stdout.write(error.strerror)
+			#sys.stdout.flush()
 			time.sleep(5.0)
 			sys.exit(1)
 		sys.stdout.write("Paired with Pi @ " + self.target_addr + "\n")
 		sys.stdout.flush()
 		return True
 
-	def openFifo():
+	def openFifo(self):
 		path = "./bluetooth.fifo"
 		file_exists = os.path.exists(path)
 		if not file_exists:
@@ -43,7 +45,7 @@ class BTInterface_Master(object):
 if __name__ =='__main__':
 	master = BTInterface_Master()
 	master.connect()
-
+	fifo = master.openFifo()
 	while(True):
 		line = fifo.readline()
 		# ------------------------------------------------------------
@@ -53,14 +55,15 @@ if __name__ =='__main__':
 		if len(line) == 0:
 			print("Writer closed")
 			fifo.close()
-			fifo = openFifo(target_name)
+			fifo = master.openFifo()
 		# ----------------------------------------------------------------
 		# Else, writer has written a line of commands parse the commands
 		# as numbers and have sphero object send via BT
 		# ----------------------------------------------------------------
 		else:
-			# master.sock.send("Test test")
+			master.sock.send(line)
 			print('Line Detected')
+			print(line)
 		if cv2.waitKey(1) & 0xFF == ord('q'):
 			break
 	master.sock.close()
