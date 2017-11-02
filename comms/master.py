@@ -21,7 +21,7 @@ class BTInterface_Master(object):
 		self.tries = 0
 		self.target_addr = serverMACAddress
 		self.sock = None
-
+		self.connected = False
 	def connect(self):
 		try:
 			self.sock=bluetooth.BluetoothSocket(bluetooth.RFCOMM)
@@ -29,10 +29,12 @@ class BTInterface_Master(object):
 		except bluetooth.btcommon.BluetoothError as error:
 			#sys.stdout.write(error.strerror)
 			#sys.stdout.flush()
-			time.sleep(5.0)
-			sys.exit(1)
+			time.sleep(1.0)
+			#sys.exit(1)
+			print('reattemptng pairing')
 		sys.stdout.write("Paired with Pi @ " + self.target_addr + "\n")
 		sys.stdout.flush()
+		master.connected = True
 		return True
 
 	def openFifo(self):
@@ -44,7 +46,9 @@ class BTInterface_Master(object):
 
 if __name__ =='__main__':
 	master = BTInterface_Master()
+	#while(~master.connected):
 	master.connect()
+	print('Connected')
 	fifo = master.openFifo()
 	while(True):
 		line = fifo.readline()
