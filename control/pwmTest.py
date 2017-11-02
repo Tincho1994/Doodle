@@ -24,8 +24,8 @@ def RunTest(rwpin, rwcenter, rwspeed, lwpin, lwcenter, lwspeed):
 	centers = {str(rwpin) : rwcenter, str(lwpin) : lwcenter}
 	json.dump(centers, open("calib_servo.txt",'w'))
 
-	rwDC = speed2DC(rwpin, rwspeed)
-	lwDC = speed2DC(lwpin, lwspeed)
+	rwDC = speed2DC.speed2DC(rwpin, rwspeed)
+	lwDC = speed2DC.speed2DC(lwpin, lwspeed)
 	print 'right wheel duty cycle: ' + str(rwDC)
 	print 'left wheel duty cycle: '  + str(lwDC)
 

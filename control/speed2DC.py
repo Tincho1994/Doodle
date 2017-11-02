@@ -28,6 +28,6 @@ def speed2DC(pin, speed):
 
 if __name__ == '__main__':
 	pin   = int(sys.argv[1])
-	speed = int(sys.argv[2])
+	speed = float(sys.argv[2])
 	out = speed2DC(pin, speed)
 	print out

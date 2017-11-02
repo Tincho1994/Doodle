@@ -15,12 +15,13 @@ def RunCal(pin):
         try:
 
                 while True:
-                       #print('Sleeping')
-                        pwm.ChangeDutyCycle(2.72)
-                        time.sleep(1)
-                        print('Running')
-                        #pwm.ChangeDutyCycle(12)
-                        #time.sleep(1)
+			#print('Sleeping')
+			#pwm.ChangeDutyCycle(2.72)
+			time.sleep(2)
+			print('Running')
+			#pwm.ChangeDutyCycle(9)
+			pwm.ChangeDutyCycle(12)
+			time.sleep(1)
         except KeyboardInterrupt:
                 pwm.ChangeDutyCycle(2.72)
                 pwm.stop()              # stop PWM output
