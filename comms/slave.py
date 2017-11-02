@@ -5,6 +5,7 @@ import struct
 import time
 import operator
 import threading
+import os
 
 hostMACAddress  = 'B8:27:EB:1B:BE:1B'
 backlog = 1
@@ -18,10 +19,10 @@ class BTInterface_Slave(object):
       self.hostMACAddress = hostMACAddress
       self.port = port
       self.size = size
-      self.pipe = connect2pipe()
+      self.pipe = self.connect2pipe()
       self.sock = None
 
-  def connect2pipe():
+  def connect2pipe(self):
     path = "./command.fifo"
     file_exists = os.path.exists(path)
     if not file_exists:
@@ -44,6 +45,7 @@ class BTInterface_Slave(object):
     except bluetooth.btcommon.BluetoothError as error:
       sys.stdout.write(str(error.strerror))
       sys.stdout.flush()
+      print('BT Error detected')
       time.sleep(5.0)
       sys.exit(1)
 
