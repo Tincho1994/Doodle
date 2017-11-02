@@ -12,6 +12,9 @@ def speed2DC(pin, speed):
 	# Setting the variables to calculate the speed
 	# These values are from Martin's MATLAB calibration code
 	m = 0.0243 
+        if speed < 0:
+          m=-m
+          speed = -speed
 	b = 7.7454
 
 	# Calculating the duty cycle
