@@ -35,7 +35,7 @@ class doodleBot(object):
 
   def parseCmd(self,cmd):
     cmdParsed  = cmd.split(',')
-    print cmdParsed[0]
+    #print cmdParsed[0]
     if (len(cmdParsed) < 3) and (len(cmdParsed) > 0):
       finCmdL = float(cmdParsed[0])
       cmdParsed2 = cmdParsed[1].split('/')
@@ -50,8 +50,8 @@ class doodleBot(object):
       rDuty = 50
     if lVel == 0:
       lDuty = 50
-    print 'right wheel duty cycle: ' + str(rDuty)
-    print 'left wheel duty cycle: '  + str(lDuty)
+    #print 'right wheel duty cycle: ' + str(rDuty)
+    #print 'left wheel duty cycle: '  + str(lDuty)
 
     self.rPWM.ChangeDutyCycle(rDuty)
     self.lPWM.ChangeDutyCycle(lDuty)
