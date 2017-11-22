@@ -14,7 +14,7 @@ class doodleBot(object):
   def __init__(self):
       self.pipe = self.connect2pipe()
       self.rwpin = 21
-      self.lwpin = 12
+      self.lwpin = 16
       self.penpin = 16
 
   def initIO(self):

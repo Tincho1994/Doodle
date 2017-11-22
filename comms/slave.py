@@ -38,7 +38,7 @@ class BTInterface_Slave(object):
       while 1:
         data = client.recv(size)
         if data:
-          self.pipe.write(data + "\n")
+          self.pipe.write(data)
           self.pipe.flush()
           print(data)
 

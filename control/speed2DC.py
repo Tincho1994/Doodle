@@ -12,13 +12,14 @@ def speed2DC(pin, speed):
 	# Setting the variables to calculate the speed
 	# These values are from Martin's MATLAB calibration code
 	m = 0.0243 
+	i = 1
         if speed < 0:
-          m=-m
+          i=-i
           speed = -speed
 	b = 7.7454
 
 	# Calculating the duty cycle
-	dc = (10**speed)*m + b 
+	dc = (10**speed)*m*i + b 
 
 	# Offsetting for the stable duty cycle of the specific servo assigned to the pin
 	center_pt = json.load(open("calib_servo.txt"))

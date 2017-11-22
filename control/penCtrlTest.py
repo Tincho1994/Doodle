@@ -16,7 +16,7 @@ def RunCal(pin):
 
                 while True:
 			#print('Sleeping')
-			#pwm.ChangeDutyCycle(2.72)
+			pwm.ChangeDutyCycle(2.72)
 			time.sleep(2)
 			print('Running')
 			#pwm.ChangeDutyCycle(9)
