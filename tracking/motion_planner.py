@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import numpy as np
 import math
+import os
 import cv2
 import cv2.aruco as aruco
 import picamera
@@ -10,6 +11,8 @@ def calcVec(pose,dest):
   if pose:
     vec = [[dest[0]-pose[0]],[pose[1]-dest[1]]]
     velVec = vec/(np.linalg.norm(vec))
+    if np.linalg.norm(vec) < 50:
+        velVec = velVec*0
   else:
     velVec =[]
   return velVec
@@ -22,6 +25,34 @@ def linVel(pose,vel):
     vLin = np.dot(T,vel)
     
     return vLin
+
+def toWheels(velLin):
+    lin = velLin[0][0]
+    omega = velLin[1][0]
+    dist2center = 1.5
+    wheelRad = 1.2
+    velR = -lin/wheelRad-omega*dist2center/wheelRad
+    velL = lin/wheelRad-omega*dist2center/wheelRad
+    velR = velR*1.3
+    velL = velL*1.3
+    if abs(velR) > 2:
+        scalar = 2/abs(velR)
+        velR = velR*scalar
+        velL = velL*scalar
+    if abs(velL) >2:
+        scalar = 2/abs(velL)
+        velR = velR*scalar
+        velL = velL*scalar
+        
+    return [velR,velL]
+
+def connect2pipe():
+    path = "/home/pi/doodle_code/comms/bluetooth.fifo"
+    file_exists = os.path.exists(path)
+    if not file_exists:
+      os.mkfifo(path)
+    return open(path,"w",1)
+
 #cap = cv2.VideoCapture(0)
 camera = picamera.PiCamera()
 stream = picamera.array.PiRGBArray(camera)
@@ -44,7 +75,7 @@ while(True):
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     aruco_dict = aruco.Dictionary_get(aruco.DICT_6X6_250)
     parameters =  aruco.DetectorParameters_create()
- 
+    pipe = connect2pipe()
 
     corners, ids, rejectedImgPoints = aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
     if corners:  
@@ -64,11 +95,15 @@ while(True):
       #gray = aruco.drawDetectedMarkers(frame, corners)
       frame = cv2.circle(gray,(int(cP[0]),int(cP[1])),10,(0,255,0),-1)
       curPose = [cP[0],cP[1], ang]
+      velVec = calcVec(curPose,curDest)
+      velLin = linVel(curPose,velVec)
+      velWheels = toWheels(velLin)
+      pipe.write(str(velWheels[0]) + ',' + str(velWheels[1]) + "\n")
+      pipe.flush()
+      print(velWheels)
     frame = cv2.circle(frame,(int(curDest[0]),int(curDest[1])),10,(255,0,0),-1)
     cv2.imshow('frame',frame)
-    velVec = calcVec(curPose,curDest)
-    velLin = linVel(curPose,velVec)
-    print(velLin)
+    
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
     stream.seek(0)
