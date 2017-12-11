@@ -6,6 +6,7 @@ import cv2
 import cv2.aruco as aruco
 import picamera
 import picamera.array 
+import time
  
 def calcVec(pose,dest):
   if pose:
@@ -43,8 +44,9 @@ def toWheels(velLin):
         scalar = 2/abs(velL)
         velR = velR*scalar
         velL = velL*scalar
-        
-    return [velR,velL]
+    
+    scale = 1    
+    return [scale*velR,scale*velL]
 
 def connect2pipe():
     path = "/home/pi/doodle_code/comms/bluetooth.fifo"
