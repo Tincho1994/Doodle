@@ -7,20 +7,20 @@ import struct
 import time
 import operator
 import threading
-import speed2DC  
+import speed2DCduo  
 import os
 
 class doodleBot(object):
 
   def __init__(self):
       self.pipe = self.connect2pipe()
-      self.rwpin = 13
-      self.lwpin = 18
+      self.rwpin = 18
+      self.lwpin = 13
       self.penpin = 16
 
   def initIO(self):
     self.piPWM = pigpio.pi()
-    self.freq = 50
+    self.freq = 100
     self.piPWM.hardware_PWM(self.rwpin,self.freq,0)
     self.piPWM.hardware_PWM(self.lwpin,self.freq,0)
 
@@ -42,16 +42,16 @@ class doodleBot(object):
     return [finCmdL,finCmdR]
 
   def changeVel(self,lVel, rVel):
-    rDuty = speed2DC.speed2DC(self.rwpin, rVel)
-    lDuty = speed2DC.speed2DC(self.lwpin, lVel)
+    rDuty = speed2DCduo.speed2DC(self.rwpin, rVel)
+    lDuty = speed2DCduo.speed2DC(self.lwpin, lVel)
     if rVel == 0:
       rDuty = 0
     if lVel == 0:
       lDuty = 0
-    #print 'right wheel duty cycle: ' + str(rDuty)
-    #print 'left wheel duty cycle: '  + str(lDuty)
-    rDuty_adj = 1000000*rDuty
-    lDuty_adj = 1000000*lDuty
+    print str(self.rwpin)+' wheel duty cycle: ' + str(rDuty)
+    print str(self.lwpin)+' wheel duty cycle: '  + str(lDuty)
+    rDuty_adj = 10000*rDuty
+    lDuty_adj = 10000*lDuty
     self.piPWM.hardware_PWM(self.rwpin,self.freq,rDuty_adj)
     self.piPWM.hardware_PWM(self.lwpin,self.freq,lDuty_adj)
   def openFifo(self):

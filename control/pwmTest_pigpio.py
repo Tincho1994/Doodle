@@ -11,7 +11,7 @@ import math
 import json
 import speed2DC
 
-def RunTest():
+def RunTest(duty13,duty18):
 
 	#GPIO.setmode(GPIO.BCM)          # choose BCM
 	#GPIO.setup(rwpin, GPIO.OUT)     # set pin as an output
@@ -34,11 +34,11 @@ def RunTest():
 	#lpwm.ChangeDutyCycle(lwDC)
 
 	pi1 = pigpio.pi()
-	pi1.hardware_PWM(13,50,70000)
-	pi1.hardware_PWM(18,50,70000)
-	time.sleep(120)
-	pi1.hardware_PWM(18,50,0)
-	pi1.hardware_PWM(13,50,0)
+	pi1.hardware_PWM(13,100,int(duty13))
+	pi1.hardware_PWM(18,100,int(duty18))
+	time.sleep(5)
+	pi1.hardware_PWM(18,100,0)
+	pi1.hardware_PWM(13,100,0)
 	pi1.stop()
 	#rpwm.stop()
 	#lpwm.stop()
@@ -46,10 +46,11 @@ def RunTest():
 	return 
 
 if __name__ == '__main__':
-	#rwpin      = int(sys.argv[1])
-	#rwcenter   = float(sys.argv[2])
+	duty13      = float(sys.argv[1])*10000
+	duty18   = float(sys.argv[2])*10000
 	#rwspeed    = float(sys.argv[3])
 	#lwpin      = int(sys.argv[4])
 	#lwcenter   = float(sys.argv[5])
 	#lwspeed    = float(sys.argv[6])
-	RunTest()
+	
+	RunTest(duty13,duty18)
