@@ -38,7 +38,7 @@ class doodleBot(object):
       finCmdL = float(cmdParsed[0])
       cmdParsed2 = cmdParsed[1].split('/')
       finCmdR = float(cmdParsed2[0])
-    print([finCmdL,finCmdR])
+    #print([finCmdL,finCmdR])
     return [finCmdL,finCmdR]
 
   def changeVel(self,lVel, rVel):
@@ -48,8 +48,8 @@ class doodleBot(object):
       rDuty = 0
     if lVel == 0:
       lDuty = 0
-    print str(self.rwpin)+' wheel duty cycle: ' + str(rDuty)
-    print str(self.lwpin)+' wheel duty cycle: '  + str(lDuty)
+    #print str(self.rwpin)+' wheel duty cycle: ' + str(rDuty)
+    #print str(self.lwpin)+' wheel duty cycle: '  + str(lDuty)
     rDuty_adj = 10000*rDuty
     lDuty_adj = 10000*lDuty
     self.piPWM.hardware_PWM(self.rwpin,self.freq,rDuty_adj)

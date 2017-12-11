@@ -38,4 +38,4 @@ if __name__ == '__main__':
 	pin   = int(sys.argv[1])
 	speed = float(sys.argv[2])
 	out = speed2DC(pin, speed)
-	print out
+	#print out
