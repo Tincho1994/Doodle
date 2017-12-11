@@ -57,7 +57,7 @@ def connect2pipe():
 camera = picamera.PiCamera()
 stream = picamera.array.PiRGBArray(camera)
 
-camera.framerate = 60
+camera.framerate = 32
 camera.resolution = (640,480)
 
 destVec = [[320,240]]
@@ -67,6 +67,7 @@ curPose = []
 
 print(cv2.__version__)
 while(True):
+    time.sleep(0.2)
     # Capture frame-by-frame
     #ret, frame = cap.read()
     camera.capture(stream, 'bgr', use_video_port=True)
