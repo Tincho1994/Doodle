@@ -133,13 +133,28 @@ while(True):
     corners, ids, rejectedImgPoints = aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
     if corners:  
       #print(corners[0][0][0])
-    
-      fL = corners[0][0][0]
-      fR = corners[0][0][1]
-      bR = corners[0][0][2]
-      cP = [(fL[0]+bR[0])/2, (fL[1]+bR[1])/2]
-      tP = [(fL[0]+fR[0])/2,(fL[1]+fR[1])/2]
-      ang = math.atan2(cP[1]-tP[1],tP[0]-cP[0])*180/math.pi
+      dest = False
+      rob = False
+      for i in len(ids):
+        if ids[i] == 2:
+          rob = True
+          fL = corners[i][0][0]
+          fR = corners[i][0][1]
+          bR = corners[i][0][2] 
+          cP = [(fL[0]+bR[0])/2, (fL[1]+bR[1])/2]
+          tP = [(fL[0]+fR[0])/2,(fL[1]+fR[1])/2]
+          ang = math.atan2(cP[1]-tP[1],tP[0]-cP[0])*180/math.pi
+          curPose = [cP[0],cP[1], ang]
+        if ids[i] == 1:
+          dest = True
+          fLd = corners[i][0][0]
+          fRd = corners[i][0][1]
+          bRd = corners[i][0][2]
+          cPd = [(fLd[0]+bRd[0])/2, (fLd[1]+bRd[1])/2]
+          curDest = [cPd[0],cPd[1]]
+
+      
+      
       #print(ang)
     #It's working.
     # my problem was that the cellphone put black all around it. The alrogithm
@@ -147,10 +162,13 @@ while(True):
  
       #gray = aruco.drawDetectedMarkers(frame, corners)
       frame = cv2.circle(gray,(int(cP[0]),int(cP[1])),10,(0,255,0),-1)
-      curPose = [cP[0],cP[1], ang]
-      velVec = calcVec(curPose,curDest)
-      detVel(ang,velVec)
-    frame = cv2.circle(frame,(int(curDest[0]),int(curDest[1])),10,(255,0,0),-1)
+      if dest and rob:
+        velVec = calcVec(curPose,curDest)
+        detVel(ang,velVec)
+        frame = cv2.circle(frame,(int(curDest[0]),int(curDest[1])),10,(255,0,0),-1)
+      else:
+        setStop()
+    
     cv2.imshow('frame',frame)
     
     if cv2.waitKey(1) & 0xFF == ord('q'):
