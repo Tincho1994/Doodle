@@ -8,7 +8,7 @@ import picamera
 import picamera.array 
 import time
  
- def setStop():
+def setStop():
   lVel = 0
   rVel = 0
   sendVel(lVel,rVel)
@@ -19,18 +19,18 @@ def setLeft():
   sendVel(lVel,rVel)
 
 def setRight():
-  lVel = 0.01
-  rVel = 0.01
+  lVel = 0.2
+  rVel = 0.2
   sendVel(lVel,rVel)
 
 def setFwd():
-  lVel = 0.2
-  rVel = -1.4
+  lVel = -1.4
+  rVel = 1.2
   sendVel(lVel,rVel)
 
 def setBkwd():
-  lVel = -1.4
-  rVel = 1
+  lVel = 1.2
+  rVel = -1.4
   sendVel(lVel,rVel)
 
 def sendVel(lVel,rVel):
@@ -48,7 +48,7 @@ def calcVec(pose,dest):
   return velVec
 
 def detVel(ang,distVec):
-  if distVec[0]==0 & distVec[1]== 0:
+  if distVec[0]==0 and distVec[1]== 0:
     setStop()
   else:
     ang2dist = math.degrees(math.atan2(distVec[1],distVec[0]))
@@ -58,14 +58,14 @@ def detVel(ang,distVec):
       ang2dist = 360+ang2dist
     angDel = ang2dist - ang
 
-    if math.fabs(angDel) < 5:
-      print('f')
+    if math.fabs(angDel) <15:
+      #print('f')
       setFwd()
     elif angDel < 0:
-      print('r')
+      #print('r')
       setRight()
     elif angDel > 0:
-      print('l')
+      #print('l')
       setLeft()
 
 def linVel(pose,vel):
@@ -140,7 +140,7 @@ while(True):
       cP = [(fL[0]+bR[0])/2, (fL[1]+bR[1])/2]
       tP = [(fL[0]+fR[0])/2,(fL[1]+fR[1])/2]
       ang = math.atan2(cP[1]-tP[1],tP[0]-cP[0])*180/math.pi
-      print(ang)
+      #print(ang)
     #It's working.
     # my problem was that the cellphone put black all around it. The alrogithm
     # depends very much upon finding rectangular black blobs
