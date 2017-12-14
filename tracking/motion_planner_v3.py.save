@@ -67,14 +67,8 @@ def detVel(ang,distVec):
     if ang2dist < 0:
       ang2dist = 360+ang2dist
     angDel = ang2dist - ang
-    #print(ang)
-    if math.fabs(angDel) >180:
-        if angDel > 0:
-            angDel = 360-ang2dist+ang
-            angDel = -angDel
-        else:
-            angDel = 360+ang2dist-ang
-            
+    print(angDel)
+
     if math.fabs(angDel) <15:
       #print('f')
       setFwd()
@@ -82,18 +76,14 @@ def detVel(ang,distVec):
       #print('r')
       if math.fabs(angDel) < 45:
         veerRight()
-        #print('vR')
       else:
         setRight()
-        #print('hR')
     elif angDel > 0:
       #print('l')
       if math.fabs(angDel) < 45:
         veerLeft()
-        #print('vL')
       else:
         setLeft()
-        #print('hL')
 
 def linVel(pose,vel):
     ang = math.radians(pose[2])
