@@ -49,6 +49,9 @@ def penDwn():
 def penUp():
   sendVel(100,100)
 
+def penStop():
+    sendVel(200,200)
+
 def sendVel(lVel,rVel):
   pipe.write(str(lVel) + ',' + str(rVel) + "\n")
   pipe.flush()
@@ -216,13 +219,19 @@ while(True):
             detVel(ang,velVec)
           elif destNP:
             drawFlag = False
+            setStop()
             penUp()
+            time.sleep(1)
+            penStop()
         else:
           if destNP:
             detVel(ang,velVec)
           elif destP:
             drawFlag = True
+            setStop()
             penDwn()
+            time.sleep(1)
+            penStop()
 
         frame = cv2.circle(frame,(int(curDest[0]),int(curDest[1])),10,(255,0,0),-1)
       else:
