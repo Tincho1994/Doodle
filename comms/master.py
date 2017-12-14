@@ -66,8 +66,8 @@ if __name__ =='__main__':
 		# ----------------------------------------------------------------
 		else:
 			master.sock.send(line)
-			print('Line Detected')
-			print(line)
+			#print('Line Detected')
+			#print(line)
 		if cv2.waitKey(1) & 0xFF == ord('q'):
 			break
 	master.sock.close()

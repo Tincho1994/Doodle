@@ -14,18 +14,18 @@ def setStop():
   sendVel(lVel,rVel)
 
 def setLeft():
-  lVel = -1.2
-  rVel = -1.2
+  lVel = -1.6
+  rVel = -1.6
   sendVel(lVel,rVel)
 
 def setRight():
-  lVel = 0.2
-  rVel = 0.2
+  lVel = 1.6
+  rVel = 1.6
   sendVel(lVel,rVel)
 
 def setFwd():
-  lVel = -1.4
-  rVel = 1.2
+  lVel = -2
+  rVel = 2
   sendVel(lVel,rVel)
 
 def setBkwd():
@@ -116,6 +116,7 @@ destVec = [[320,240]]
 curDestInd = 0
 curDest = destVec[0]
 curPose = []
+cP = [0,0]
 
 print(cv2.__version__)
 while(True):
@@ -126,17 +127,17 @@ while(True):
     frame = stream.array
     # Our operations on the frame come here
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    aruco_dict = aruco.Dictionary_get(aruco.DICT_6X6_250)
+    aruco_dict = aruco.Dictionary_get(aruco.DICT_4X4_250)
     parameters =  aruco.DetectorParameters_create()
     pipe = connect2pipe()
 
     corners, ids, rejectedImgPoints = aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
     if corners:  
-      #print(corners[0][0][0])
+      #print(ids)
       dest = False
       rob = False
-      for i in len(ids):
-        if ids[i] == 2:
+      for i in range(len(ids)):
+        if ids[i] == 3:
           rob = True
           fL = corners[i][0][0]
           fR = corners[i][0][1]
